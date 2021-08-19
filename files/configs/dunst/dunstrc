@@ -1,0 +1,29 @@
+[global]
+    monitor = 0
+    follow = mouse
+    geometry = "300x5-7+25"
+    transparency = 90
+    frame_width = 2
+    frame_color = "#{color/info/hex}"
+    font = Monospace 10
+    icon_path = /usr/share/icons/breeze-dark/status/22:/usr/share/icons/breeze-dark/devices/22:/usr/share/icons/breeze-dark/actions/22
+    dmenu = /usr/bin/dmenu -p dunst:
+    browser = /usr/bin/{app/web_browser} --new-tab
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#{color/popup_background/hex}"
+    foreground = "#{color/popup_foreground/hex"
+
+[urgency_normal]
+    background = "#{color/popup_background/hex}"
+    foreground = "#{color/popup_foreground/hex}"
+
+[urgency_critical]
+    background = "#{color/warning/hex}"
+    foreground = "#{color/popup_foreground/hex}"
+    frame_color = "#{color/error/hex}"
+
+# vim: ft=cfg

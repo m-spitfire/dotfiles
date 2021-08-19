@@ -1,0 +1,27 @@
+#!/bin/sh
+# commands used:
+# - transmission-remote
+# - sed
+# - sort
+# - uniq
+# - awk
+# - paste
+
+
+if pidof -q transmission-daemon; then
+  TEXT=$(transmission-remote -l | grep % |
+        sed " # the letters are for sorting
+        s/.*Stopped.*/A /;
+        s/.*Seeding.*/Z /;
+        s/.*100%.*/N /;
+        s/.*Idle.*/B /;
+        s/.*Uploading.*/L /;
+        s/.*%.*/M /;" |
+        sort -h | uniq -c | awk '{print $3 $1}' | paste -sd ' ' -)
+else
+  TEXT="TD stopped"
+fi
+
+[ "${TEXT}" = "" ] && TEXT="No torrents"
+
+printf '%s' "${TEXT}"

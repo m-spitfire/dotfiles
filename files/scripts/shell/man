@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# mb: start blink
+# md: start bold
+# me: end all attributes
+# so: start standout
+# se: end standout
+# us: start underline
+# ue: end underline
+
+# shellcheck disable=SC1083
+BLINK_COLOR_FG={color/base0C/number}
+BOLD_COLOR_FG={color/base09/number}
+STANDOUT_COLOR_FG={color/base00/number}
+STANDOUT_COLOR_BG={color/base09/number}
+UNDERLINE_COLOR_FG={color/base0B/number}
+
+env \
+  LESS_TERMCAP_mb="$(tput setaf ${BLINK_COLOR_FG})" \
+  LESS_TERMCAP_md="$(tput bold; tput setaf ${BOLD_COLOR_FG})" \
+  LESS_TERMCAP_me="$(tput sgr0)" \
+  LESS_TERMCAP_so="$(tput setaf ${STANDOUT_COLOR_FG}; tput setab ${STANDOUT_COLOR_BG})" \
+  LESS_TERMCAP_se="$(tput sgr0)" \
+  LESS_TERMCAP_us="$(tput setaf ${UNDERLINE_COLOR_FG})" \
+  LESS_TERMCAP_ue="$(tput sgr0)" \
+  /usr/bin/man "$@"

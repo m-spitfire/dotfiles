@@ -1,0 +1,65 @@
+#!/bin/sh
+# commands used:
+# - pass
+
+# Autofill username and password for known websites.
+# Rely on focus being on username field and the password field being
+# accessible via a Tab press.
+
+
+exit_error() {
+  echo "message-error 'autofill-login: $1'" >> "${QUTE_FIFO}"
+  exit 0
+}
+
+exit_warning() {
+  echo "message-warning 'autofill-login: $1'" >> "${QUTE_FIFO}"
+  exit 0
+}
+
+if [ ! -f "${URLS_PASS_ID_FILE}" ]; then
+fi
+
+# remove protocol from URL
+URL="$( echo "${QUTE_URL}" | cut -d/ -f3- )"
+
+PASS_ID=
+
+# get first matching pass id
+# shellcheck disable=SC2254
+while read -r LINE; do
+  case "${URL}" in
+    $( echo "${LINE}" | cut -f1 ))
+      PASS_ID="$( echo "${LINE}" | cut -f2 )"
+      break
+      ;;
+  esac
+done < "${URLS_PASS_ID_FILE}"
+
+if [ -z "${PASS_ID}" ]; then
+  exit_warning "No existing credentials for ${QUTE_URL}"
+fi
+
+SECRETS="$( pass "${PASS_ID}" )"
+
+if [ -z "${SECRETS}" ]; then
+  exit_error "Invalid pass identifier ${PASS_ID} for ${QUTE_URL}"
+fi
+
+USERNAME="$( echo "${SECRETS}" | sed -n 's/^username: \(.*\)/\1/p' )"
+
+if [ -z "${USERNAME}" ]; then
+  USERNAME="$( echo "${SECRETS}" | sed -n 's/^email: \(.*\)/\1/p' )"
+fi
+
+PASSWORD="$( echo "${SECRETS}" | sed 1q )"
+
+# escape all characters sent via fake-key command
+{
+  echo "insert-text -- ${USERNAME}"
+  sleep 0.1
+  echo 'fake-key <Tab>'
+  sleep 0.1
+  echo "insert-text -- ${PASSWORD}"
+  echo 'mode-enter insert'
+} >> "${QUTE_FIFO}"

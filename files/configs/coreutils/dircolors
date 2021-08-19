@@ -1,0 +1,144 @@
+TERM alacritty
+TERM tmux-256color
+TERM xterm-256color
+
+NORMAL                           0                   # global default
+FILE                             0                   # normal file
+DIR            1;{color/base09/fg}                   # directory
+OTHER_WRITABLE 1;{color/base04/fg};{color/base09/bg} # directory writable by others
+LINK           4;{color/base04/fg}                   # symbolic link
+FIFO           4;{color/base0A/fg}                   # named pipe
+SOCK           4;{color/base0B/fg}                   # socket
+BLK            1;{color/base08/fg}                   # block device
+CHR            4;{color/base08/fg}                   # character device
+ORPHAN            {color/error/fg}                   # orphaned symlink
+MISSING        1;{color/base04/fg};{color/error/bg}  # missing file that orphaned symlink points to
+EXEC           1;{color/base0C/fg}                   # executable
+
+# Source text
+.bash   {color/base0B/fg}
+.c      {color/base0B/fg}
+.cc     {color/base0B/fg}
+.cpp    {color/base0B/fg}
+.css    {color/base0B/fg}
+.csv    {color/base0B/fg}
+.go     {color/base0B/fg}
+.h      {color/base0B/fg}
+.hpp    {color/base0B/fg}
+.hs     {color/base0B/fg}
+.htm    {color/base0B/fg}
+.html   {color/base0B/fg}
+.java   {color/base0B/fg}
+.js     {color/base0B/fg}
+.json   {color/base0B/fg}
+.man    {color/base0B/fg}
+.md     {color/base0B/fg}
+.mkd    {color/base0B/fg}
+.php    {color/base0B/fg}
+.pl     {color/base0B/fg}
+.py     {color/base0B/fg}
+.rb     {color/base0B/fg}
+.sh     {color/base0B/fg}
+.sql    {color/base0B/fg}
+.tex    {color/base0B/fg}
+.txt    {color/base0B/fg}
+.vim    {color/base0B/fg}
+.xhtml  {color/base0B/fg}
+.xml    {color/base0B/fg}
+.yml    {color/base0B/fg}
+.zsh    {color/base0B/fg}
+
+# Books
+.azw  {color/base0B/fg}
+.cbr  {color/base0B/fg}
+.cbz  {color/base0B/fg}
+.azw3 {color/base0B/fg}
+.epub {color/base0B/fg}
+.mobi {color/base0B/fg}
+.pdf  {color/base0B/fg}
+
+# Image
+.bmp  {color/base0B/fg}
+.eps  {color/base0B/fg}
+.gif  {color/base0B/fg}
+.ico  {color/base0B/fg}
+.jpeg {color/base0B/fg}
+.jpg  {color/base0B/fg}
+.png  {color/base0B/fg}
+.ppm  {color/base0B/fg}
+.ps   {color/base0B/fg}
+.svg  {color/base0B/fg}
+.svgz {color/base0B/fg}
+.tif  {color/base0B/fg}
+.tiff {color/base0B/fg}
+.xcf  {color/base0B/fg}
+
+# Audio
+.aac  {color/base0B/fg}
+.flac {color/base0B/fg}
+.m4a  {color/base0B/fg}
+.mid  {color/base0B/fg}
+.midi {color/base0B/fg}
+.mp3  {color/base0B/fg}
+.mpa  {color/base0B/fg}
+.mpeg {color/base0B/fg}
+.mpg  {color/base0B/fg}
+.ogg  {color/base0B/fg}
+.wav  {color/base0B/fg}
+
+# Video
+.avi  {color/base0B/fg}
+.m2v  {color/base0B/fg}
+.m4v  {color/base0B/fg}
+.mkv  {color/base0B/fg}
+.mov  {color/base0B/fg}
+.mp4  {color/base0B/fg}
+.mpeg {color/base0B/fg}
+.mpg  {color/base0B/fg}
+.ogm  {color/base0B/fg}
+.ogv  {color/base0B/fg}
+.ogx  {color/base0B/fg}
+.vob  {color/base0B/fg}
+.webm {color/base0B/fg}
+.wmv  {color/base0B/fg}
+
+# Binary documents
+# (formats which we don't really want to use for storing data)
+.doc  {color/notice/fg}
+.docx {color/notice/fg}
+.dot  {color/notice/fg}
+.dotx {color/notice/fg}
+.odp  {color/notice/fg}
+.ods  {color/notice/fg}
+.odt  {color/notice/fg}
+.otp  {color/notice/fg}
+.ots  {color/notice/fg}
+.ott  {color/notice/fg}
+.ppt  {color/notice/fg}
+.pptx {color/notice/fg}
+.psd  {color/notice/fg}
+.rtf  {color/notice/fg}
+.xls  {color/notice/fg}
+.xlsx {color/notice/fg}
+
+# Archives
+.7z   1;{color/base04/fg}
+.apk  1;{color/base04/fg}
+.bz   1;{color/base04/fg}
+.bz2  1;{color/base04/fg}
+.deb  1;{color/base04/fg}
+.gem  1;{color/base04/fg}
+.gz   1;{color/base04/fg}
+.iso  1;{color/base04/fg}
+.jar  1;{color/base04/fg}
+.rar  1;{color/base04/fg}
+.rpm  1;{color/base04/fg}
+.tar  1;{color/base04/fg}
+.tbz  1;{color/base04/fg}
+.tbz2 1;{color/base04/fg}
+.tgz  1;{color/base04/fg}
+.war  1;{color/base04/fg}
+.xz   1;{color/base04/fg}
+.z    1;{color/base04/fg}
+.zip  1;{color/base04/fg}
+.zst  1;{color/base04/fg}

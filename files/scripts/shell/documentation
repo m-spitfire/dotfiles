@@ -1,0 +1,133 @@
+#!/bin/sh
+
+init_variables() {
+  COMMAND=${0##*/}
+
+  ZSH_VERSION=$( zsh --version | cut -d ' ' -f 2 )
+  ZSH_HELPDIR="/usr/share/zsh/${ZSH_VERSION}/help"
+  MAN_PATH="${MANPATH:-/usr/share/man}"
+
+  TOPIC=
+  SECTION=
+}
+
+parse_command_line() {
+  TOPIC="$1"
+  SECTION="$2"
+}
+
+validate_command_line() {
+  if [ -z "${TOPIC}" ]; then
+    exit_error 'missing topic argument'
+  fi
+}
+
+exit_error() {
+  [ -z "$1" ] || echo "${COMMAND}: $1"
+  exit 1
+} >&2
+
+select_section()
+{
+  SECTIONS=
+
+  # zsh section
+  if [ -f "${ZSH_HELPDIR}/${TOPIC}" ]; then
+    SECTIONS="${SECTIONS}:zsh"
+  fi
+
+  # man sections
+  SECTIONS="${SECTIONS}:$(
+    echo "${MAN_PATH}" \
+      | tr ':' '\n' \
+      | xargs -I{} find -L {} -type f -name "${TOPIC}.[0-9]*" \
+      | sed -e '/.*\.gz$/s/.*\.\([^.]*\).gz/\1/' \
+            -e '/.*\.[0-9][^.]*$/s/.*\.\([^.]*\)$/\1/' \
+      | sort -u \
+      | tr '\n' ':'
+  )"
+
+  # don't show menu if there is not at least 2 sections
+  if [ "$( echo "${SECTIONS}" | tr ':' '\n' | grep -c '.' )" -lt 2 ]; then
+    return 0
+  fi
+
+  # manual menu building
+  # order of displayed sections is the order of documentation lookup
+  # for example: zsh / 1 / 1p / 3
+  echo 'Available documentation sections:'
+  echo "${SECTIONS}" \
+    | tr ':' '\n' \
+    | grep '.' \
+    | while read -r ITEM; do
+        echo "${ITEM})"
+        section_name "${ITEM}"
+      done \
+    | pr -l1 -s -2 \
+    | expand  -t 8 \
+    | sort -n
+  printf 'Select section (empty for default): '
+
+  read -r SECTION
+}
+
+section_name() {
+  case "$1" in
+    zsh) echo 'ZSH help' ;;
+    0p) echo 'Header files (POSIX)' ;;
+    0*) echo 'Header files';;
+    1p) echo 'General commands (POSIX)' ;;
+    1*) echo 'General commands' ;;
+    2*) echo 'System functions' ;;
+    3*) echo 'Library functions' ;;
+    4*) echo 'Special files' ;;
+    5*) echo 'File formats and conventions' ;;
+    6*) echo 'Games' ;;
+    7*) echo 'Miscellaneous' ;;
+    8*) echo 'System administration commands' ;;
+    9*) echo 'Kernel routines' ;;
+  esac
+}
+
+search_documentation() {
+  if [ -z "${SECTION}" ] || [ "${SECTION}" = 'zsh' ]; then
+    if [ -f "${ZSH_HELPDIR}/${TOPIC}" ]; then
+      "${PAGER}" "${ZSH_HELPDIR}/${TOPIC}"
+      return 0
+    fi
+  fi
+
+  if [ -z "${SECTION}" ]; then
+    if [ "$( echo "${MAN_PATH}" | tr ':' '\n' \
+              | xargs -I{} find -L {} -type f -name "${TOPIC}.[0-9]*" \
+              | wc -l )" -ge 1 ]; then \
+      man "${TOPIC}"
+      return 0
+    fi
+
+    echo "no documentation available for '${TOPIC}'"
+
+  else
+    if [ "$( echo "${MAN_PATH}" | tr ':' '\n' \
+              | xargs -I{} find -L {} -type f \
+                -name "${TOPIC}.${SECTION}" -o -name "${TOPIC}.${SECTION}.*" \
+              | wc -l )" -ge 1 ]; then \
+      man "${TOPIC}.${SECTION}"
+      return 0
+    fi
+
+    echo "no documentation available for '${TOPIC}' section '${SECTION}'"
+  fi
+
+  return 1
+}
+
+init_variables
+parse_command_line "$@"
+validate_command_line
+
+if [ -z "${SECTION}" ]; then
+  select_section
+fi
+
+search_documentation

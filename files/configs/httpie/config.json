@@ -1,0 +1,8 @@
+{
+    "default_options": [
+      "--style=auto",
+      "--body",
+      "--check-status",
+      "--format-options=headers.sort:true,json.sort_keys:false,json.indent:4"
+    ]
+}

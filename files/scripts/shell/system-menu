@@ -1,0 +1,20 @@
+#!/bin/sh
+
+ACTION=$(
+  {
+    echo 'Lock screen';
+    echo 'Suspend';
+    echo 'Logout';
+    echo 'Shut down';
+    echo 'Reboot';
+  } \
+    | dmenu -p 'Execute'
+)
+
+case "${ACTION}" in
+  Lock\ screen) slock ;;
+  Suspend)      sudo zzz ;;
+  Logout)       pkill xinit; logout;;
+  Shut\ down)   sudo shutdown -h now;;
+  Reboot)       sudo reboot ;;
+esac

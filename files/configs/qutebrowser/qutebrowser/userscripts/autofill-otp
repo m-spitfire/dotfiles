@@ -1,0 +1,53 @@
+#!/bin/sh
+# commands used:
+# - ykman
+
+# Autofill OTP for known websites.
+# Rely on focus being on OTP field
+
+URLS_OTP_ID_FILE="${PASSWORD_STORE_DIR:-$HOME/.password-store}/urls_otp_id"
+
+exit_error() {
+  echo "message-error 'autofill-otp: $1'" >> "${QUTE_FIFO}"
+  exit 0
+}
+
+exit_warning() {
+  echo "message-warning 'autofill-otp: $1'" >> "${QUTE_FIFO}"
+  exit 0
+}
+
+if [ ! -f "${URLS_OTP_ID_FILE}" ]; then
+  exit_error 'Missing urls otp id file'
+fi
+
+# remove protocol from URL
+URL="$( echo "${QUTE_URL}" | cut -d/ -f3- )"
+
+OTP_ID=
+
+# get first matching otp id
+# shellcheck disable=SC2254
+while read -r LINE; do
+  case "${URL}" in
+    $( echo "${LINE}" | cut -f1 ))
+      OTP_ID="$( echo "${LINE}" | cut -f2 )"
+      break
+      ;;
+  esac
+done < "${URLS_OTP_ID_FILE}"
+
+if [ -z "${OTP_ID}" ]; then
+  exit_warning "No existing OTP for ${QUTE_URL}"
+fi
+
+OTP_CODE="$( ykman oath accounts code -s "${OTP_ID}" )"
+
+if [ -z "${OTP_CODE}" ]; then
+  exit_error "Invalid OTP identifier ${OTP_ID} for ${QUTE_URL}"
+fi
+
+{
+  echo "insert-text -- ${OTP_CODE}"
+  echo 'mode-enter insert'
+} >> "${QUTE_FIFO}"

@@ -1,0 +1,20 @@
+#!/bin/sh
+# commands used:
+# - pamixer
+
+
+
+VOLUME_INFO=$(pamixer --get-volume-human)
+
+if [ "${VOLUME_INFO}" = "muted" ]; then
+  TEXT='  Muted'
+else
+  if [ "${VOLUME_INFO%%%}" -lt 50 ]; then
+    VOLUME_ICON=''
+  else
+    VOLUME_ICON=''
+  fi
+  TEXT="${VOLUME_ICON}  ${VOLUME_INFO}"
+fi
+
+printf '%s' "${TEXT}"

@@ -1,0 +1,26 @@
+bind-key {key/down} down
+bind-key {key/up} up
+bind-key {key/down} next articlelist
+bind-key {key/up} prev articlelist
+bind-key {key/down/upp} next-feed articlelist
+bind-key {key/up/upp} next-feed articlelist
+bind-key {key/goto_top} home
+bind-key {key/goyo_bottom} end
+bind-key {key/scroll_down} pagedown
+bind-key {key/scroll_uip} pageup
+bind-key {key/right} open
+bind-key {key/left} quit
+bind-key {key/alternate} toggle-article-read
+bind-key {key/next} next-unread
+bind-key {key/next/upp} next-unread
+bind-key {key/download/upp} pb-download
+bind-key {key/x} pb-delete
+
+macro {key/,} open-in-browser
+macro {key/t} set browser "qndl" ; open-in-browser ; set browser linkhandler
+macro {key/a} set browser "tsp youtube-dl --add-metadata -xic -f bestaudio/best" ; open-in-browser ; set browser linkhandler
+macro {key/v} set browser "setsid -f mpv" ; open-in-browser ; set browser linkhandler
+macro {key/w} set browser "lynx" ; open-in-browser ; set browser linkhandler
+macro {key/d} set browser "dmenuhandler" ; open-in-browser ; set browser linkhandler
+macro {key/c} set browser "echo %u | xclip -r -sel c" ; open-in-browser ; set browser linkhandler
+macro {key/C} set browser "youtube-viewer --comments=%u" ; open-in-browser ; set browser linkhandler

@@ -1,0 +1,7 @@
+s|{app/document_viewer}|zathura|g
+s|{app/image_viewer}|sxiv|g
+s|{app/system_monitor}|alacritty -e htop|g
+s|{app/terminal_emulator}|alacritty|g
+s|{app/text_editor}|alacritty -e nvim|g
+s|{app/web_browser}|qutebrowser|g
+s|{app/gemini_browser}|alacritty -e amfora|g

@@ -1,0 +1,137 @@
+[alias]
+    aa = add -A
+    ama = am --abort
+    amc = am --continue
+    amend = commit --amend -a --no-edit
+    argument= "! \
+        h() {  \
+          case $1 in \
+            '') echo HEAD ;; \
+            *[!0-9]*) echo $1 ;; \
+            *) \
+              if git rev-parse --verify $1 > /dev/null 2>&1; then \
+                echo $1; \
+              else \
+                echo HEAD~$1; \
+              fi ;; \
+          esac \
+        }; h"
+    bl = blame --color-by-age --color-lines
+    br = branch
+    brd = branch -D
+    browse = "! \
+        f() { \
+          [ -z \"${URL}\" ] && return 1; \
+          xdg-open \"${URL}\"; \
+        }; f"
+    bw = browse
+    bwc = "! f() { git browse -t commit -c $( git argument $1 ); }; f"
+    bwi = "! f() { git browse -t issue -c $( git argument $1 ); }; f"
+    bwr = "! f() { git browse -t review -c $( git argument $1 ); }; f"
+    cb = checkout -b
+    ci = commit
+    cia = commit -a
+    cl = clone
+    co = checkout
+    coma = checkout master
+    commit-description = "! \
+        f() { \
+          git log -1 $( git argument $1 ) --pretty=%b \
+          | grep -vE \"$(git config --get-regexp 'trailer.*.key' | cut -d ' ' -f2- | tr '\n' '|')^$\"; \
+        }; f"
+    commit-issue-id = "! \
+        f() { \
+          git log -1 $( git argument $1 ) \
+            --pretty=\"%(trailers:key=$(git config trailer.issue.key),valueonly)\"; \
+        }; f"
+    commit-review-id = "! \
+        f() { \
+          git log -1 $( git argument $1 ) \
+            --pretty=\"%(trailers:key=$(git config trailer.review.key),valueonly)\" \
+          | sed -e 's%/$%%' -e 's%.*/%%'; \
+        }; f"
+    commit-subject = "! \
+        f() { \
+          git log -1 $( git argument $1 ) --pretty=%s; \
+        }; f"
+    count = rev-list --count HEAD
+    cp = cherry-pick
+    cpa = cherry-pick --abort
+    cpc = cherry-pick --continue
+    current-branch = "! \
+        f() { \
+          branch=$( git branch --show-current ); \
+          [ $? -eq 0 ] || return 1; \
+          if [ -z \"${branch}\" ]; then \
+            echo 'no branch'; \
+          else \
+            echo \"${branch}\"; \
+          fi \
+        }; f"
+    df = diff
+    df0 = diff -U0
+    dfc = diff --cached
+    dfc0 = diff --cached -U0
+    fe = fetch --all
+    first-commit = ! git rev-list --max-parents=0 HEAD | tail -n 1
+    head = "! f() { git log --raw -1 $( git argument $1 ); }; f"
+    hist = "! \
+        f() { \
+          git log --color --oneline -n 10 \"$@\" \
+            | nl -v0 -w2 -s' '; \
+        }; f"
+    log1 = log --oneline
+    mg = merge
+    mga = merge --abort
+    mgc = merge --continue
+    mgrbma = "!f(){ git co $1 && git rbma && git coma && git mg -; }; f"
+    pcb = push-current-branch
+    pl = pull
+    push-current-branch = "! \
+        f() { \
+          remote=\"$1\"; \
+          if [ \"${remote}\" = 'origin' ]; then \
+            git push origin -u HEAD:$(git current-branch); \
+          else \
+            git push \"${remote}\" HEAD:$(git current-branch); \
+          fi \
+        }; f"
+    rb = rebase
+    rba = rebase --abort
+    rbc = rebase --continue
+    rbi = "! f() { git rebase -i $( git argument $1 ); }; f"
+    rbma = rebase -i master
+    recent = "! \
+        git for-each-ref --count=5 --sort=-committerdate --color \
+        --format \"%(HEAD) %(color:$(git config color.recent.refname))%(refname:short)%(color:reset) | %(color:$(git config color.recent.committerdate))%(committerdate:human)%(color:reset) | %(subject)\" refs/heads \
+        | column -t -s '|'"
+    reset-upstream = reset --hard @{upstream}
+    reword = commit --amend -o
+    root = rev-parse --show-toplevel
+    rv = revert
+    rva = revert --abort
+    rvc = revert --continue
+    sad = stash drop
+    sal = stash list
+    sapo = stash pop
+    sapu = stash push
+    sas = stash show
+    sh = "! f() { git show $( git argument $1 ); }; f"
+    sh0 = "! f() { git show -U0 $( git argument $1 ); }; f"
+    st = status -s -b
+    stamp = "! \
+        f() { \
+          git commit --amend --no-edit -o --trailer \"$1=$2\" > /dev/null; \
+          git log -1 --pretty=%B; \
+        }; f"
+    sti = stamp issue
+    str = stamp review
+    tag-list = "! \
+        git tag --color \
+        --format \"%(color:$(git config color.tag-list.refname))%(refname:short)%(color:reset) | %(taggerdate:iso) | %(taggeremail) | %(subject)\" \
+        | column -t -s '|'"
+    wip = "! \
+        git add -A \
+        && git commit -m WIP \
+        && git push -f origin HEAD:wip-$(git current-branch) \
+        && git reset HEAD~"

@@ -1,0 +1,26 @@
+#!/bin/sh
+# commands used:
+# - pulsemixer
+
+
+VOLUME_INFO=$(
+  pulsemixer --list-sources \
+    | grep source-0
+)
+
+if echo "${VOLUME_INFO}" | grep -q "Mute: 1"; then
+  ICON=""
+  VOLUME_PERCENT=""
+else
+  ICON=""
+  VOLUME_PERCENT=$(
+    echo "${VOLUME_INFO}" \
+      | grep -P -o "\d+%" \
+      | head -n 1
+  )
+fi
+
+
+TEXT="${ICON} ${VOLUME_PERCENT}"
+
+printf '%s' "${TEXT%% }"

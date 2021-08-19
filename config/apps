@@ -1,0 +1,7 @@
+document_viewer   zathura
+image_viewer      sxiv
+system_monitor    alacritty -e htop
+terminal_emulator alacritty
+text_editor       alacritty -e nvim
+web_browser       qutebrowser
+gemini_browser    alacritty -e amfora

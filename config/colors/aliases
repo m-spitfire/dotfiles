@@ -1,0 +1,22 @@
+| ALIAS                      | BASE   |
+|----------------------------|--------|
+| background                 | base00 |
+| foreground                 | base04 |
+| status_line_background     | base01 |
+| status_line_foreground     | base05 |
+| popup_background           | base02 |
+| popup_foreground           | base04 |
+| popup_group_background     | base01 |
+| popup_group_foreground     | base05 |
+| alert                      | base0F |
+| error                      | base0F |
+| warning                    | base0E |
+| notice                     | base0D |
+| info                       | base0A |
+| success                    | base0C |
+| search_match               | base07 |
+| current_item               | base0B |
+| selected_item              | base07 |
+| unread_item                | base07 |
+| delete                     | base06 |
+| add                        | base0C |

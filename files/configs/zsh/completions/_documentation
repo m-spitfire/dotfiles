@@ -1,0 +1,4 @@
+#compdef documentation
+
+# run-help completion doesn't include commands which have no man pages
+_run-help || _path_commands

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if ! fuser /dev/video0 > /dev/null 2>&1; then
+  exit 0
+fi
+
+TEXT=''
+
+printf '%s' "${TEXT}"

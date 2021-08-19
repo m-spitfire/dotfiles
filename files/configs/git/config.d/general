@@ -1,0 +1,33 @@
+[user]
+    name = Murad Bashirov
+    email = carlsonmu@gmail.com
+    insteadOf = gh:
+    insteadOf = gh_spit:
+[browse "gh"]
+    repoPathSed = "s|.*:\\(.*\\)|\\1|"
+    repoUrl = https://www.github.com/{repo_path}
+    commitUrl = https://www.github.com/{repo_path}/commit/{commit_id}
+    issueUrl = https://www.github.com/{repo_path}/issues/{issue_id}
+[browse "gh_spit"]
+    repoPathSed = "s|.*:\\(.*\\)|spitfire-hash/\\1|"
+    repoUrl = https://www.github.com/{repo_path}
+    commitUrl = https://www.github.com/{repo_path}/commit/{commit_id}
+    issueUrl = https://www.github.com/{repo_path}/issues/{issue_id}
+[trailer]
+	separators = ":#"
+	where = after
+	ifexists = addIfDifferent
+[trailer "issue"]
+	key = "Issue #"
+[trailer "review"]
+	key = Reviewed-at
+	ifexists = replace
+[init]
+    defaultBranch = master
+    templatedir = {dir/config}/git/template
+[push]
+    default = upstream
+[core]
+    pager = /usr/share/git/diff-highlight/diff-highlight | less -FX -x4
+[tag]
+    sort = version:refname

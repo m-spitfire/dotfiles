@@ -1,0 +1,30 @@
+# locale settings
+export LANG=en_US.UTF-8
+export LC_ADDRESS=en_US.UTF-8
+export LC_COLLATE=C
+export LC_CTYPE=en_US.UTF-8
+export LC_IDENTIFICATION=en_US.UTF-8
+export LC_MEASUREMENT=en_US.UTF-8
+export LC_MESSAGES=en_US.UTF-8
+export LC_MONETARY=en_US.UTF-8
+export LC_NAME=en_US.UTF-8
+export LC_NUMERIC=en_US.UTF-8
+export LC_PAPER=en_US.UTF-8
+export LC_TELEPHONE=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+
+# Use 256 colors in terminal
+if [ -n "${TMUX}" ]; then
+  export TERM=tmux-256color
+else
+  export TERM=xterm-256color
+fi
+
+# Needed to use true colors in some applications
+export COLORTERM='truecolor'
+
+# Add custom man pages location to man path
+export MANPATH="${XDG_DATA_HOME:-$HOME/.local/share}/man:/usr/share/man"
+
+# define desktop environment
+export XDG_CURRENT_DESKTOP=dwm

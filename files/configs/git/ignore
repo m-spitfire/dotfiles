@@ -1,0 +1,12 @@
+# tools
+.tags*
+.notags
+.aliases
+.ignore
+
+# system
+.directory
+
+# temporary
+*~
+*.swp

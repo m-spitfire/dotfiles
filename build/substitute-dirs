@@ -1,0 +1,4 @@
+s|{dir/bin}|/home/spitfire/.local/bin|g
+s|{dir/cache}|/home/spitfire/.cache|g
+s|{dir/config}|/home/spitfire/.config|g
+s|{dir/data}|/home/spitfire/.local/share|g

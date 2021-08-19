@@ -1,0 +1,97 @@
+#command
+
+# general
+{key/quit}       quit
+:{key/quit}      quit
+\e{key/h}        help
+:{key/h}         help
+^{key/clear/upp} repaint
+{key/0}          digit
+{key/1}          digit
+{key/2}          digit
+{key/3}          digit
+{key/4}          digit
+{key/5}          digit
+{key/6}          digit
+{key/7}          digit
+{key/8}          digit
+{key/9}          digit
+{key/-}          toggle-option
+{key/_}          display-option
+{key/|}          pipe
+{key/!}          shell
+{key/+}          firstcmd
+{key/v}          visual
+{key/s}          toggle-option o
+{key/=}          status
+\e{key/f}        forw-forever
+
+# navigation
+{key/down}                  forw-line
+^{key/scroll_line_down/upp} forw-line
+{key/up}                    back-line
+^{key/scroll_line_up/upp}   back-line
+{key/left}                  left-scroll
+{key/right}                 right-scroll
+^{key/scroll_down/upp}      forw-scroll
+^{key/scroll_up/upp}        back-scroll
+^{key/scroll_page_down/upp} forw-window
+^{key/scroll_page_up/upp}   back-window
+{key/goto_top}              goto-line
+{key/goto_bottom}           goto-end
+{key/%}                     percent
+{key/mark_set}              set-mark
+{key/mark_jump}             goto-mark
+
+# search
+{key/search_forward}          forw-search
+{key/search_backward}         back-search
+{key/search_repeat}           repeat-search
+{key/search_repeat_reverse}   reverse-search
+\e{key/search_repeat}         repeat-search-all
+\e{key/search_repeat_reverse} reverse-search-all
+{key/&}                       filter
+{key/return/\n}               undo-hilite
+
+# files
+^{key/next}     next-file
+:{key/next}     next-file
+^{key/previous} prev-file
+:{key/previous} prev-file
+:{key/edit}     examine
+:{key/delete}   remove-file
+:{key/1}        index-file
+
+# next line prevents less from defining default command keybindings
+#stop
+
+
+#line-edit
+
+{key/right/\kr}                         right
+\e{key/right}                           right
+{key/left/\kl}                          left
+\e{key/left}                            left
+^{key/command_start/upp}                home
+^{key/command_end/upp}                  end
+\e{key/word_previous_start}             word-left
+\e{key/word_space_previous_start}       word-left
+\e{key/word_next_start}                 word-right
+\e{key/word_space_next_start}           word-right
+\e{key/word_next_end}                   word-right
+\e{key/word_space_next_end}             word-right
+\e{key/delete/low}                      word-delete
+\e{key/delete/upp}                      word-delete
+^{key/command_delete_backward_word/upp} word-backspace
+^{key/command_delete_all/upp}           kill-line
+{key/up/\ku}                            up
+^{key/previous/upp}                     up
+{key/down/\kd}                          down
+^{key/next/upp}                         down
+{key/complete/\t}                       forw-complete
+
+# next line prevents less from defining default line-edit keybindings
+#stop
+
+#env
+LESS = -inQRS --incsearch --use-color -DB{color/base03/number}$DC{color/base03/number}$DE{color/status_line_foreground/number}.{color/status_line_background/number}$DM{color/base00/number}.{color/base09/number}$DN{color/base03/number}$DP{color/status_line_foreground/number}.{color/status_line_background/number}$DR{color/foreground/number}.{color/base02/number}$DS{color/base00/number}.{color/search_match/number}

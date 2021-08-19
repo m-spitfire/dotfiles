@@ -1,0 +1,125 @@
+#!/bin/sh
+# commands used:
+# - seq
+
+THEME="$1"
+
+SCRIPT_FILE="build/substitute-colors-${THEME}"
+
+if [ -f "${SCRIPT_FILE}" ]; then
+  sed -f "${SCRIPT_FILE}" -
+  exit
+fi
+
+BASE_COLORS_FILE="config/colors/base_${THEME}"
+ALIASES_COLORS_FILE="config/colors/aliases"
+
+mkdir -p build
+
+{
+  # color theme
+  echo "s|{color/theme}|${THEME}|g"
+
+  # aliases intermediate conversion to base color equivalent
+  tail -n+3 "${ALIASES_COLORS_FILE}" \
+    | while read -r LINE; do
+        ALIAS=$( echo "${LINE}" | sed 's/| \([a-z_]*\) *|.*/\1/' )
+        BASE_COLOR=$( echo "${LINE}" | sed 's/.* \(base0[[:alnum:]]\) .*/\1/' )
+        echo "s|{color/${ALIAS}/\([[:alpha:]]*\)}|{color/${BASE_COLOR}/\1}|g"
+      done
+
+  # names intermediate conversion to base equivalent
+  for i in $( seq 0 15 )
+  do
+    INDEX=$( printf '%X' "$i" )
+    NAME=$( sed -n "s/| base0${INDEX} | #[[:alnum:]]* | *[[:digit:]]* | \([[:alpha:]]*\) *|.*/\1/p" "${BASE_COLORS_FILE}" )
+    echo "s|{color/${NAME}/\([[:alpha:]]*\)}|{color/base0${INDEX}/\1}|g"
+  done
+
+  # hexadecimal final conversion
+  for i in $( seq 0 15 )
+  do
+    INDEX=$( printf '%X' "$i" )
+    BASE_HEX=$( sed -n "s/| base0${INDEX} | #\([[:alnum:]]*\) |.*/\1/p" "${BASE_COLORS_FILE}" )
+    echo "s|{color/base0${INDEX}/hex}|${BASE_HEX}|g"
+  done
+
+  # fixed intermediate conversion
+  # for color name via 16 color number
+  echo 's|{color/base0\([[:alnum:]]\)/name}|{color/number_{color/base0\1/number}/name}|g'
+
+  # fixed intermediate conversion
+  # for foreground color code via 16 color number
+  echo 's|{color/base0\([[:alnum:]]\)/fg}|{color/number_{color/base0\1/number}/fg}|g'
+
+  # fixed intermediate conversion
+  # for background color code via 16 color number
+  echo 's|{color/base0\([[:alnum:]]\)/bg}|{color/number_{color/base0\1/number}/bg}|g'
+
+  # number final conversion
+  for i in $( seq 0 15 )
+  do
+    INDEX=$( printf '%X' "$i" )
+    BASE_NUMBER=$( sed -n "s/| base0${INDEX} | #[[:alnum:]]* | *\([[:digit:]]*\) |.*/\1/p" "${BASE_COLORS_FILE}" )
+    echo "s|{color/base0${INDEX}/number}|${BASE_NUMBER}|g"
+  done
+
+  # fixed ANSI final conversion
+  # from 16 color number to color name
+  echo 's|{color/number_0/name}|black|g'
+  echo 's|{color/number_1/name}|red|g'
+  echo 's|{color/number_2/name}|green|g'
+  echo 's|{color/number_3/name}|yellow|g'
+  echo 's|{color/number_4/name}|blue|g'
+  echo 's|{color/number_5/name}|magenta|g'
+  echo 's|{color/number_6/name}|cyan|g'
+  echo 's|{color/number_7/name}|white|g'
+  echo 's|{color/number_8/name}|brblack|g'
+  echo 's|{color/number_9/name}|brred|g'
+  echo 's|{color/number_10/name}|brgreen|g'
+  echo 's|{color/number_11/name}|bryellow|g'
+  echo 's|{color/number_12/name}|brblue|g'
+  echo 's|{color/number_13/name}|brmagenta|g'
+  echo 's|{color/number_14/name}|brcyan|g'
+  echo 's|{color/number_15/name}|brwhite|g'
+
+  # fixed ANSI final conversion
+  # from 16 color number to foreground color code
+  echo 's|{color/number_0/fg}|30|g'
+  echo 's|{color/number_1/fg}|31|g'
+  echo 's|{color/number_2/fg}|32|g'
+  echo 's|{color/number_3/fg}|33|g'
+  echo 's|{color/number_4/fg}|34|g'
+  echo 's|{color/number_5/fg}|35|g'
+  echo 's|{color/number_6/fg}|36|g'
+  echo 's|{color/number_7/fg}|37|g'
+  echo 's|{color/number_8/fg}|90|g'
+  echo 's|{color/number_9/fg}|91|g'
+  echo 's|{color/number_10/fg}|92|g'
+  echo 's|{color/number_11/fg}|93|g'
+  echo 's|{color/number_12/fg}|94|g'
+  echo 's|{color/number_13/fg}|95|g'
+  echo 's|{color/number_14/fg}|96|g'
+  echo 's|{color/number_15/fg}|97|g'
+
+  # fixed ANSI final conversion
+  # from 16 color number to background color code
+  echo 's|{color/number_0/bg}|40|g'
+  echo 's|{color/number_1/bg}|41|g'
+  echo 's|{color/number_2/bg}|42|g'
+  echo 's|{color/number_3/bg}|43|g'
+  echo 's|{color/number_4/bg}|44|g'
+  echo 's|{color/number_5/bg}|45|g'
+  echo 's|{color/number_6/bg}|46|g'
+  echo 's|{color/number_7/bg}|47|g'
+  echo 's|{color/number_8/bg}|100|g'
+  echo 's|{color/number_9/bg}|101|g'
+  echo 's|{color/number_10/bg}|102|g'
+  echo 's|{color/number_11/bg}|103|g'
+  echo 's|{color/number_12/bg}|104|g'
+  echo 's|{color/number_13/bg}|105|g'
+  echo 's|{color/number_14/bg}|106|g'
+  echo 's|{color/number_15/bg}|107|g'
+} > "${SCRIPT_FILE}"
+
+sed -f "${SCRIPT_FILE}" -

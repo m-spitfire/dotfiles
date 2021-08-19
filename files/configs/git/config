@@ -1,0 +1,4 @@
+[include]
+    path = {dir/config}/git/config.d/general
+    path = {dir/config}/git/config.d/aliases
+    path = {dir/config}/git/config.d/style

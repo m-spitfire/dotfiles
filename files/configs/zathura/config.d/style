@@ -1,0 +1,39 @@
+# show command line and status line
+set guioptions 'cs'
+
+set font 'JetBrains Mono'
+
+set highlight-transparency 0.4
+
+# paddings
+set statusbar-h-padding 2
+set statusbar-v-padding 0
+set page-padding 3
+
+# colors
+set default-bg '#{color/background/hex}'
+set default-fg '#{color/foreground/hex}'
+set statusbar-bg '#{color/status_line_background/hex}'
+set statusbar-fg '#{color/status_line_foreground/hex}'
+set inputbar-bg '#{color/background/hex}'
+set inputbar-fg '#{color/foreground/hex}'
+set completion-bg '#{color/popup_background/hex}'
+set completion-fg '#{color/popup_foreground/hex}'
+set completion-group-bg '#{color/popup_group_background/hex}'
+set completion-group-fg '#{color/popup_group_foreground/hex}'
+set completion-highlight-bg '#{color/current_item/hex}'
+set completion-highlight-fg '#{color/base00/hex}'
+set notification-bg '#{color/info/hex}'
+set notification-fg '#{color/base00/hex}'
+set notification-warning-bg '#{color/warning/hex}'
+set notification-warning-fg '#{color/base00/hex}'
+set notification-error-bg '#{color/error/hex}'
+set notification-error-fg '#{color/base00/hex}'
+set highlight-color '#{color/search_match/hex}'
+set highlight-active-color '#{color/base09/hex}'
+set render-loading-bg '#ffffff'
+set completion-highlight-fg '#{color/base00/hex}'
+set index-bg '#{color/background/hex}'
+set index-fg '#{color/foreground/hex}'
+set index-active-bg '#{color/current_item/hex}'
+set index-active-fg '#{color/base00/hex}'

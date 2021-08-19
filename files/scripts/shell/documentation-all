@@ -1,0 +1,86 @@
+#!/bin/sh
+
+init_variables() {
+  COMMAND=${0##*/}
+
+  CACHE_TOPICS_PATH="${XDG_CACHE_HOME:-$HOME/.cache}/documentation_topics"
+  ZSH_VERSION=$( zsh --version | cut -d ' ' -f 2 )
+  ZSH_HELPDIR="/usr/share/zsh/${ZSH_VERSION}/help"
+  MAN_PATH="${MANPATH:-/usr/share/man}"
+
+  BUILD_CACHE_ONLY=false
+}
+
+parse_command_line() {
+  while getopts c OPT; do
+    case "${OPT}" in
+      c) BUILD_CACHE_ONLY=true ;;
+      ?) exit_error ;;
+    esac
+  done
+
+  shift $(( OPTIND - 1 ))
+}
+
+# shellcheck disable=SC2120
+exit_error() {
+  [ -z "$1" ] || echo "${COMMAND}: $1"
+  exit 1
+} >&2
+
+build_cache() {
+  mkdir -p "$( dirname "${CACHE_TOPICS_PATH}" )"
+
+  if [ "${BUILD_CACHE_ONLY}" = 'false' ]; then
+    echo "Building list of topics..." >&2
+  fi
+
+  PATH_COMMANDS=$(
+    printf '%s' "${PATH}" \
+      | tr ':' '\n' \
+      | xargs -I '[]' \
+        -- find -L '[]' \
+           -type f \
+           -exec basename {} \; \
+           2> /dev/null
+  )
+
+  ZSH_HELP_TOPICS=$( ls "${ZSH_HELPDIR}" )
+
+  MAN_TOPICS=$(
+    echo "${MAN_PATH}" \
+      | tr ':' '\n' \
+      | xargs -I{} find -L {} -type f \
+      | sed -e '/.*\.gz$/s#.*/\([^/]*\)\.[^\.]*\.gz#\1#' \
+            -e '/.*\.[0-9][^.]*$/s#.*/\([^/]*\)\.[0-9]*[^.]*$#\1#'
+  )
+
+  {
+    echo "${PATH_COMMANDS}";
+    echo "${ZSH_HELP_TOPICS}";
+    echo "${MAN_TOPICS}";
+  } \
+  | sort -u \
+  > "${CACHE_TOPICS_PATH}"
+}
+
+init_variables
+parse_command_line "$@"
+
+if [ "${BUILD_CACHE_ONLY}" = 'true' ]; then
+  build_cache
+  exit
+fi
+
+[ -f "${CACHE_TOPICS_PATH}" ] || build_cache
+
+SELECTED_TOPIC=$(
+  fzf --layout=reverse \
+      --no-multi \
+      --height=10 \
+    < "${CACHE_TOPICS_PATH}"
+)
+
+if [ -n "${SELECTED_TOPIC}" ]; then
+  documentation "${SELECTED_TOPIC}"
+fi

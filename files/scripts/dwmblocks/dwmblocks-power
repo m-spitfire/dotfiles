@@ -1,0 +1,42 @@
+#!/bin/sh
+# commands used:
+# - battery-status
+
+BATTERY_STATUS=$( battery-status )
+
+ADAPTER_STATUS=$(
+  echo "${BATTERY_STATUS}" \
+    | sed -n 's/^Adapter: \(.*\)$/\1/p'
+)
+IS_ANY_BATTERY_CHARGING=$(
+  echo "${BATTERY_STATUS}" \
+    | sed -n 's/^Charging: \(.*\)$/\1/p'
+)
+TOTAL_ENERGY_PERCENT=$(
+  echo "${BATTERY_STATUS}" \
+    | sed -n 's/^Charge: \(.*\)%$/\1/p'
+)
+
+if [ "${TOTAL_ENERGY_PERCENT}" -lt 10 ]; then
+  BATTERY_ICON=''
+elif [ "${TOTAL_ENERGY_PERCENT}" -lt 40 ]; then
+  BATTERY_ICON=''
+elif [ "${TOTAL_ENERGY_PERCENT}" -lt 60 ]; then
+  BATTERY_ICON=''
+elif [ "${TOTAL_ENERGY_PERCENT}" -lt 90 ]; then
+  BATTERY_ICON=''
+else
+  BATTERY_ICON=''
+fi
+
+if [ "${ADAPTER_STATUS}" = 'on' ]; then
+  if [ "${IS_ANY_BATTERY_CHARGING}" = 'yes' ]; then
+    TEXT=" ${BATTERY_ICON}  ${TOTAL_ENERGY_PERCENT}%"
+  else
+    TEXT='  AC'
+  fi
+else
+  TEXT="${BATTERY_ICON}  ${TOTAL_ENERGY_PERCENT}%"
+fi
+
+printf '%s' "${TEXT}"
